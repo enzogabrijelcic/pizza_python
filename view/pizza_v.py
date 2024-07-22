@@ -1,36 +1,69 @@
 import tkinter as tk
 from tkinter import messagebox
 from controller.pizza_c import Controller
+from PIL import Image, ImageTk
 
 class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.controller = Controller()
         self.title("Pizzaria Delivery")
-        self.geometry("400x600")
-        self.show_login_window()
+        self.geometry("600x600")
+        self.criar_tela_inicio()
+    
+    def criar_tela_inicio(self):
+        self.clear_window()
+        # Carregar a imagem de fundo
+        self.background_image = Image.open("pizza_python\midia\Pizzaria stories para Instagram escuro (1).png")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+       
+        tk.Button(self, text="Entrar", command=self.show_login_window, width=20,bg= "pink", height=2, font=("Arial", 16)).pack(pady=260)
 
     def show_login_window(self):
         self.clear_window()
-        tk.Label(self, text="Usuário:").pack(pady=5)
+        # Carregar a imagem de fundo
+        self.background_image = Image.open("pizza_python\midia\login_cadastro.png")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        tk.Label(self, text="Usuário:",font=("Arial", 16)).pack(pady=20)
         self.username_entry = tk.Entry(self)
-        self.username_entry.pack(pady=5)
-        tk.Label(self, text="Senha:").pack(pady=5)
+        self.username_entry.pack(pady=10)
+        tk.Label(self, text="Senha:",font=("Arial", 16)).pack(pady=20)
         self.password_entry = tk.Entry(self, show='*')
-        self.password_entry.pack(pady=5)
-        tk.Button(self, text="Login", command=self.login).pack(pady=20)
-        tk.Button(self, text="Cadastrar", command=self.show_register_window).pack(pady=5)
+        self.password_entry.pack(pady=10)
+        tk.Button(self, text="Login",font=("Arial", 16), command=self.login).pack(pady=30)
+        tk.Button(self, text="Cadastrar",font=("Arial", 16), command=self.show_register_window).pack(pady=5)
 
     def show_register_window(self):
         self.clear_window()
-        tk.Label(self, text="Novo Usuário:").pack(pady=5)
+        # Carregar a imagem de fundo
+        self.background_image = Image.open("pizza_python\midia\login_cadastro.png")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        tk.Label(self, text="Novo Usuário:",font=("Arial", 16)).pack(pady=20)
         self.new_username_entry = tk.Entry(self)
-        self.new_username_entry.pack(pady=5)
-        tk.Label(self, text="Nova Senha:").pack(pady=5)
+        self.new_username_entry.pack(pady=15)
+        tk.Label(self, text="Nova Senha:",font=("Arial", 16)).pack(pady=20)
         self.new_password_entry = tk.Entry(self, show='*')
-        self.new_password_entry.pack(pady=5)
-        tk.Button(self, text="Cadastrar", command=self.register).pack(pady=20)
-        tk.Button(self, text="Voltar ao Login", command=self.show_login_window).pack(pady=5)
+        self.new_password_entry.pack(pady=15)
+        tk.Button(self, text="Cadastrar",font=("Arial", 16), command=self.register).pack(pady=20)
+        tk.Button(self, text="Voltar ao Login",font=("Arial", 16), command=self.show_login_window).pack(pady=5)
 
     def login(self):
         username = self.username_entry.get()
@@ -51,6 +84,15 @@ class Application(tk.Tk):
 
     def show_menu_window(self):
         self.clear_window()
+        # Carregar a imagem de fundo
+        self.background_image = Image.open("pizza_python\midia\pizza_bg.jpg")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
         self.selected_items = []
         self.menu_items = self.controller.get_menu()
 
@@ -117,36 +159,55 @@ class Application(tk.Tk):
             return
         
         self.clear_window()
+        # Carregar a imagem de fundo
+        self.background_image = Image.open("pizza_python/midia/tela_pedidos_carrinho.jpeg")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
         total_price = sum(item['valor'] for item in self.selected_items)
         self.payment_var = tk.StringVar(value='Dinheiro')
 
-        tk.Label(self, text="Resumo do Pedido").pack(pady=5)
-        tk.Label(self, text=f"Items: {', '.join(item['name'] for item in self.selected_items)}").pack(pady=5)
-        tk.Label(self, text=f"Valor Total: ${total_price}").pack(pady=5)
+        tk.Label(self,font=("Arial", 15), text="Resumo do Pedido").pack(pady=30)
+        tk.Label(self,font=("Arial", 15), text=f"Itens: {', '.join(item['name'] for item in self.selected_items)}").pack(pady=5)
+        tk.Label(self,font=("Arial", 15), text=f"Valor Total: ${total_price}").pack(pady=5)
         
-        tk.Label(self, text="Selecione a forma de pagamento:").pack(pady=5)
-        tk.Radiobutton(self, text="Dinheiro", variable=self.payment_var, value='Dinheiro').pack()
-        tk.Radiobutton(self, text="Cartao de Credito", variable=self.payment_var, value='Cartao de Credito').pack()
-        tk.Radiobutton(self, text="Pix", variable=self.payment_var, value='Pix').pack()
+        tk.Label(self,font=("Arial", 14), text="Selecione a forma de pagamento:").pack(pady=5)
+        tk.Radiobutton(self,font=("Arial", 13), text="Dinheiro", variable=self.payment_var, value='Dinheiro').pack()
+        tk.Radiobutton(self,font=("Arial", 13), text="Cartao de Credito", variable=self.payment_var, value='Cartao de Credito').pack()
+        tk.Radiobutton(self,font=("Arial", 13), text="Pix", variable=self.payment_var, value='Pix').pack()
 
-        tk.Button(self, text="Finalize o Pedido", command=lambda: self.show_address_window(total_price)).pack(pady=10)
-        tk.Button(self, text="Voltar ao Cardapio", command=self.show_menu_window).pack(pady=10)
+        tk.Button(self,font=("Arial", 14), text="Finalize o Pedido", command=lambda: self.show_address_window(total_price)).pack(pady=10)
+        tk.Button(self,font=("Arial", 14), text="Voltar ao Cardapio", command=self.show_menu_window).pack(pady=10)
 
     def show_address_window(self, total_price):
         self.clear_window()
+
+        # Carregar a imagem de fundo
+        self.background_image = Image.open("pizza_python/midia/tela_pedidos_carrinho.jpeg")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
         self.delivery_var = tk.StringVar(value='Delivery')
         self.address_entry = tk.Entry(self)
 
-        tk.Label(self, text="Endereço da Entrega( deixe em branco se for pegar na loja)").pack(pady=5)
+        tk.Label(self,font=("Arial", 16), text="Endereço da Entrega( deixe em branco se for pegar na loja)").pack(pady=5)
         self.address_entry.pack(pady=5)
-        tk.Label(self, text=f"Frete: $10").pack(pady=5)
-        tk.Label(self, text=f"Valor Total: ${total_price + 10 if self.delivery_var.get() == 'Delivery' else total_price}").pack(pady=5)
+        tk.Label(self,font=("Arial", 14), text=f"Frete: $10").pack(pady=15)
+        tk.Label(self,font=("Arial", 14), text=f"Valor Total: ${total_price + 10 if self.delivery_var.get() == 'Delivery' else total_price}").pack(pady=5)
         
-        tk.Label(self, text="Selecione a Forma de entrega:").pack(pady=5)
-        tk.Radiobutton(self, text="Delivery", variable=self.delivery_var, value='Delivery').pack()
-        tk.Radiobutton(self, text="Retirar na Loja", variable=self.delivery_var, value='Retirar na Loja').pack()
+        tk.Label(self,font=("Arial", 16), text="Selecione a Forma de entrega:").pack(pady=5)
+        tk.Radiobutton(self,font=("Arial", 14), text="Delivery", variable=self.delivery_var, value='Delivery').pack()
+        tk.Radiobutton(self,font=("Arial", 14), text="Retirar na Loja", variable=self.delivery_var, value='Retirar na Loja').pack()
 
-        tk.Button(self, text="Finalize o Pedido", command=lambda: self.validate_and_confirm_order(total_price)).pack(pady=20)
+        tk.Button(self,font=("Arial", 16), text="Finalize o Pedido", command=lambda: self.validate_and_confirm_order(total_price)).pack(pady=20)
 
     def validate_and_confirm_order(self, total_price):
         address = self.address_entry.get()
