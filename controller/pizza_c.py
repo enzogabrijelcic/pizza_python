@@ -1,5 +1,6 @@
 from model.pizza_m import Database
 
+
 class Controller:
     def __init__(self):
         self.db = Database()
@@ -19,3 +20,6 @@ class Controller:
 
     def get_last_order_id(self):
         return self.db.get_last_order_id()
+    
+    def update_quantity(self, item, var):
+            item['quantidade'] = var.get()
