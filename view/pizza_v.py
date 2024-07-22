@@ -11,7 +11,7 @@ class Application(tk.Tk):
         self.show_login_window()
         
     def show_login_window(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         tk.Label(self, text="Usuário:").pack(pady=5)
         self.username_entry = tk.Entry(self)
         self.username_entry.pack(pady=5)
@@ -22,7 +22,7 @@ class Application(tk.Tk):
         tk.Button(self, text="Cadastrar", command=self.show_register_window).pack(pady=5)
 
     def show_register_window(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         tk.Label(self, text="Novo Usuário:").pack(pady=5)
         self.new_username_entry = tk.Entry(self)
         self.new_username_entry.pack(pady=5)
@@ -50,7 +50,7 @@ class Application(tk.Tk):
         self.show_login_window()
         
     def show_menu_window(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         self.selected_items = []
         self.menu_items = self.controller.get_menu() 
 
@@ -135,7 +135,7 @@ class Application(tk.Tk):
             messagebox.showwarning("Atenção!", "Selecione no mínimo um item antes de ver o resumo do pedido.")
             return
         
-        self.clear_window()
+        self.controller.clear_window(self)
         total_price = sum(item['valor'] for item in self.selected_items)
         self.payment_var = tk.StringVar(value='Dinheiro')
 
@@ -152,7 +152,7 @@ class Application(tk.Tk):
         tk.Button(self, text="Voltar ao Cardapio", command=self.show_menu_window).pack(pady=10)
 
     def show_address_window(self, total_price):
-        self.clear_window()
+        self.controller.clear_window(self)
         self.delivery_var = tk.StringVar(value='Tele-Entrega')
         self.address_entry = tk.Entry(self)
 
@@ -181,9 +181,6 @@ class Application(tk.Tk):
         self.controller.place_order(self.user_id, items, final_price, payment_method, address, delivery_type)
         order_id = self.controller.get_last_order_id()
         messagebox.showinfo("Pedido Finalizado", f"Numero do seu pedido:{order_id}. Obrigado por comprar conosco!")
-        self.clear_window()
+        self.controller.clear_window()
         self.show_login_window()
 
-    def clear_window(self):
-        for widget in self.winfo_children():
-            widget.destroy()

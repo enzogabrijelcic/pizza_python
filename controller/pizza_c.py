@@ -23,3 +23,7 @@ class Controller:
     
     def update_quantity(self, item, var):
             item['quantidade'] = var.get()
+    
+    def clear_window(self,parent):
+        for widget in parent.winfo_children():
+            widget.destroy()
