@@ -12,9 +12,9 @@ class Application(tk.Tk):
         self.criar_tela_inicio()
     
     def criar_tela_inicio(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         # Carregar a imagem de fundo
-        self.background_image = Image.open("midia\Pizzaria stories para Instagram escuro (1).png")
+        self.background_image = Image.open("midia/Pizzaria stories para Instagram escuro (1).png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -26,7 +26,7 @@ class Application(tk.Tk):
         tk.Button(self, text="Entrar", command=self.show_login_window, width=20,bg= "pink", height=2, font=("Arial", 16)).pack(pady=260)
 
     def show_login_window(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         # Carregar a imagem de fundo
         self.background_image = Image.open("midia\login_cadastro.png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
@@ -46,7 +46,7 @@ class Application(tk.Tk):
         tk.Button(self, text="Cadastrar",font=("Arial", 16), command=self.show_register_window).pack(pady=5)
 
     def show_register_window(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         # Carregar a imagem de fundo
         self.background_image = Image.open("midia\login_cadastro.png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
@@ -81,9 +81,9 @@ class Application(tk.Tk):
         self.controller.register(username, password)
         messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
         self.show_login_window()
-
+        
     def show_menu_window(self):
-        self.clear_window()
+        self.controller.clear_window(self)
         # Carregar a imagem de fundo
         self.background_image = Image.open("midia\pizza_bg.jpg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
@@ -94,58 +94,76 @@ class Application(tk.Tk):
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
         self.selected_items = []
-        self.menu_items = self.controller.get_menu()
+        self.menu_items = self.controller.get_menu() 
 
-        tk.Label(self, text="Menu - Salgadas").pack(pady=5)
+        tk.Label(self,font=("Arial", 14), text="Menu - Salgadas").pack(pady=5)
         self.salgadas = [
-            {"name": "Marguerita", "valor": 25.0},
-            {"name": "Calabresa", "valor": 28.0},
-            {"name": "4 Queijos", "valor": 30.0},
-            {"name": "Mussarela", "valor": 27.0},
-            {"name": "Frango", "valor": 26.0}
+            {"name": "Marguerita", "valor": 25.0, "quantidade": 0},
+            {"name": "Calabresa", "valor": 28.0, "quantidade": 0},
+            {"name": "4 Queijos", "valor": 30.0, "quantidade": 0},
+            {"name": "Mussarela", "valor": 27.0, "quantidade": 0},
+            {"name": "Frango", "valor": 26.0, "quantidade": 0}
         ]
         self.salgadas_vars = []
 
         for item in self.salgadas:
-            var = tk.IntVar()
-            tk.Checkbutton(self, text=f"{item['name']} - ${item['valor']}", variable=var).pack()
+            frame = tk.Frame(self)
+            frame.pack()
+            tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
+            var = tk.IntVar(value=0)
+            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
+            spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
+            spinbox.pack(side=tk.RIGHT)
             self.salgadas_vars.append((item, var))
 
-        tk.Label(self, text="Menu - Doces").pack(pady=5)
+        tk.Label(self,font=("Arial", 14), text="Menu - Doces").pack(pady=5)
         self.doces = [
-            {"name": "Chocolate", "valor": 20.0},
-            {"name": "Morango com Chocolate", "valor": 22.0},
-            {"name": "chocolate branco", "valor": 24.0},
-            {"name": "Banana", "valor": 23.0}
+            {"name": "Chocolate", "valor": 20.0, "quantidade": 0},
+            {"name": "Morango com Chocolate", "valor": 22.0, "quantidade": 0},
+            {"name": "chocolate branco", "valor": 24.0, "quantidade": 0},
+            {"name": "Banana", "valor": 23.0, "quantidade": 0}
         ]
         self.doces_vars = []
 
         for item in self.doces:
+            frame = tk.Frame(self)
+            frame.pack()
+            tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar()
-            tk.Checkbutton(self, text=f"{item['name']} - ${item['valor']}", variable=var).pack()
+            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
+            spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
+            spinbox.pack(side=tk.RIGHT)          
             self.doces_vars.append((item, var))
 
-        tk.Label(self, text="Bebidas").pack(pady=5)
+        tk.Label(self,font=("Arial", 14), text="Bebidas").pack(pady=5)
         self.bebidas = [
-            {"name": "Suco", "valor": 5.0},
-            {"name": "Agua", "valor": 3.0},
-            {"name": "Pepsi", "valor": 6.0},
-            {"name": "Guaraná", "valor": 6.0},
-            {"name": "Heineken", "valor": 8.0},
-            {"name": "Vinho", "valor": 15.0}
+            {"name": "Suco", "valor": 5.0, "quantidade": 0},
+            {"name": "Agua", "valor": 3.0,"quantidade": 0},
+            {"name": "Pepsi", "valor": 6.0, "quantidade": 0},
+            {"name": "Guaraná", "valor": 6.0, "quantidade": 0},
+            {"name": "Heineken", "valor": 8.0, "quantidade": 0},
+            {"name": "Vinho", "valor": 15.0, "quantidade": 0}
         ]
         self.bebidas_vars = []
 
         for item in self.bebidas:
+            frame = tk.Frame(self)
+            frame.pack()
+            tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar()
-            tk.Checkbutton(self, text=f"{item['name']} - ${item['valor']}", variable=var).pack()
+            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
+            spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
+            spinbox.pack(side=tk.RIGHT)   
             self.bebidas_vars.append((item, var))
-
-        tk.Button(self, text="Adicionar ao Pedido", command=self.add_to_order).pack(pady=10)
-        tk.Button(self, text="Ir ao Resumo do Pedido", command=self.show_summary_window).pack(pady=10)
+        
+    
+        tk.Button(self,font=("Arial", 13), text="Adicionar ao Pedido", command=self.add_to_order).pack(pady=10)
+        tk.Button(self,font=("Arial", 13), text="Ir ao Resumo do Pedido", command=self.show_summary_window).pack(pady=10)
+    
+    
 
     def add_to_order(self):
-        for item, var in self.salgadas_vars + self.doces_vars + self.bebidas_vars:
+        for item, var in  self.salgadas_vars+self.doces_vars +self.bebidas_vars:
             if var.get():
                 self.selected_items.append(item)
         if not self.selected_items:
@@ -155,10 +173,10 @@ class Application(tk.Tk):
 
     def show_summary_window(self):
         if not self.selected_items:
-            messagebox.showwarning("Atenção!", "Selecione no mínimo um item antes de Ver o resumo do pedido.")
+            messagebox.showwarning("Atenção!", "Selecione no mínimo um item antes de ver o resumo do pedido.")
             return
         
-        self.clear_window()
+        self.controller.clear_window(self)
         # Carregar a imagem de fundo
         self.background_image = Image.open("midia/tela_pedidos_carrinho.jpeg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
@@ -184,7 +202,7 @@ class Application(tk.Tk):
         tk.Button(self,font=("Arial", 14), text="Voltar ao Cardapio", command=self.show_menu_window).pack(pady=10)
 
     def show_address_window(self, total_price):
-        self.clear_window()
+        self.controller.clear_window(self)
 
         # Carregar a imagem de fundo
         self.background_image = Image.open("midia/tela_pedidos_carrinho.jpeg")
@@ -213,18 +231,16 @@ class Application(tk.Tk):
         address = self.address_entry.get()
         delivery_type = self.delivery_var.get()
         payment_method = self.payment_var.get()
-        final_price = total_price + 10 if delivery_type == 'Delivery' else total_price
+        final_price = total_price + 10 if delivery_type == 'Tele-Entrega' else total_price
 
-        if delivery_type == 'Delivery' and not address:
-            messagebox.showerror("Erro", "É necessario inserir o endereço para delivery.Por favor insira um endereço.")
+        if delivery_type == 'Tele-Entrega' and not address:
+            messagebox.showerror("Erro", "É necessario inserir o endereço para tele-entrega.Por favor insira um endereço.")
             return
         
         items = ', '.join(item['name'] for item in self.selected_items)
         self.controller.place_order(self.user_id, items, final_price, payment_method, address, delivery_type)
         order_id = self.controller.get_last_order_id()
         messagebox.showinfo("Pedido Finalizado", f"Numero do seu pedido:{order_id}. Obrigado por comprar conosco!")
-        self.destroy()
+        self.controller.clear_window(self)
+        self.show_login_window()
 
-    def clear_window(self):
-        for widget in self.winfo_children():
-            widget.destroy()
