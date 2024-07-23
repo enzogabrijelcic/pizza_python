@@ -69,7 +69,7 @@ class Application(tk.Tk):
             frame.pack()
             tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar(value=0)
-            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.update_quantity(item, var))
+            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
             spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
             spinbox.pack(side=tk.RIGHT)
             self.salgadas_vars.append((item, var))
@@ -88,7 +88,7 @@ class Application(tk.Tk):
             frame.pack()
             tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar()
-            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.update_quantity(item, var))
+            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
             spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
             spinbox.pack(side=tk.RIGHT)          
             self.doces_vars.append((item, var))
@@ -109,7 +109,7 @@ class Application(tk.Tk):
             frame.pack()
             tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar()
-            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.update_quantity(item, var))
+            var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
             spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
             spinbox.pack(side=tk.RIGHT)   
             self.bebidas_vars.append((item, var))
@@ -118,8 +118,7 @@ class Application(tk.Tk):
         tk.Button(self, text="Adicionar ao Pedido", command=self.add_to_order).pack(pady=10)
         tk.Button(self, text="Ir ao Resumo do Pedido", command=self.show_summary_window).pack(pady=10)
     
-    def update_quantity(self, item, var):
-        item['quantidade'] = var.get() 
+    
 
     def add_to_order(self):
         for item, var in  self.salgadas_vars+self.doces_vars +self.bebidas_vars:
@@ -181,6 +180,6 @@ class Application(tk.Tk):
         self.controller.place_order(self.user_id, items, final_price, payment_method, address, delivery_type)
         order_id = self.controller.get_last_order_id()
         messagebox.showinfo("Pedido Finalizado", f"Numero do seu pedido:{order_id}. Obrigado por comprar conosco!")
-        self.controller.clear_window()
+        self.controller.clear_window(self)
         self.show_login_window()
 

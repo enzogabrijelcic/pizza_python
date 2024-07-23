@@ -27,3 +27,4 @@ class Controller:
     def clear_window(self,parent):
         for widget in parent.winfo_children():
             widget.destroy()
+            
