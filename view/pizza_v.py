@@ -14,7 +14,7 @@ class Application(tk.Tk):
     def criar_tela_inicio(self):
         self.clear_window()
         # Carregar a imagem de fundo
-        self.background_image = Image.open("pizza_python\midia\Pizzaria stories para Instagram escuro (1).png")
+        self.background_image = Image.open("midia\Pizzaria stories para Instagram escuro (1).png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -28,7 +28,7 @@ class Application(tk.Tk):
     def show_login_window(self):
         self.clear_window()
         # Carregar a imagem de fundo
-        self.background_image = Image.open("pizza_python\midia\login_cadastro.png")
+        self.background_image = Image.open("midia\login_cadastro.png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -48,7 +48,7 @@ class Application(tk.Tk):
     def show_register_window(self):
         self.clear_window()
         # Carregar a imagem de fundo
-        self.background_image = Image.open("pizza_python\midia\login_cadastro.png")
+        self.background_image = Image.open("midia\login_cadastro.png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -85,7 +85,7 @@ class Application(tk.Tk):
     def show_menu_window(self):
         self.clear_window()
         # Carregar a imagem de fundo
-        self.background_image = Image.open("pizza_python\midia\pizza_bg.jpg")
+        self.background_image = Image.open("midia\pizza_bg.jpg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -160,7 +160,7 @@ class Application(tk.Tk):
         
         self.clear_window()
         # Carregar a imagem de fundo
-        self.background_image = Image.open("pizza_python/midia/tela_pedidos_carrinho.jpeg")
+        self.background_image = Image.open("midia/tela_pedidos_carrinho.jpeg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -187,7 +187,7 @@ class Application(tk.Tk):
         self.clear_window()
 
         # Carregar a imagem de fundo
-        self.background_image = Image.open("pizza_python/midia/tela_pedidos_carrinho.jpeg")
+        self.background_image = Image.open("midia/tela_pedidos_carrinho.jpeg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
