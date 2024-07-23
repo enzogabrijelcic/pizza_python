@@ -38,6 +38,7 @@ class Application(tk.Tk):
         user = self.controller.login(username, password)
         if user:
             self.user_id = user[0]
+            messagebox.showinfo("Login!", "Seja bem vindo!")
             self.show_menu_window()
         else:
             messagebox.showerror("Erro", "Login Inválido")
@@ -67,7 +68,7 @@ class Application(tk.Tk):
         for item in self.salgadas:
             frame = tk.Frame(self)
             frame.pack()
-            tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
+            tk.Label(frame, text=f'{item["name"]} - R${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar(value=0)
             var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
             spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
@@ -86,7 +87,7 @@ class Application(tk.Tk):
         for item in self.doces:
             frame = tk.Frame(self)
             frame.pack()
-            tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
+            tk.Label(frame, text=f'{item["name"]} - R${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar()
             var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
             spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
@@ -107,7 +108,7 @@ class Application(tk.Tk):
         for item in self.bebidas:
             frame = tk.Frame(self)
             frame.pack()
-            tk.Label(frame, text=f'{item["name"]} - ${item["valor"]}').pack(side=tk.LEFT)
+            tk.Label(frame, text=f'{item["name"]} - R${item["valor"]}').pack(side=tk.LEFT)
             var = tk.IntVar()
             var.trace_add('write', lambda _, __, ___, item=item, var=var: self.controller.update_quantity(item, var))
             spinbox = tk.Spinbox(frame, from_=0, to=100, textvariable=var, width=3)
@@ -140,7 +141,7 @@ class Application(tk.Tk):
 
         tk.Label(self, text="Resumo do Pedido").pack(pady=5)
         tk.Label(self, text=f"Items: {', '.join(f"{item['name']} (x{item['quantidade']})"for item in self.selected_items)}").pack(pady=5)
-        tk.Label(self, text=f"Valor Total: ${total_price}").pack(pady=5)
+        tk.Label(self, text=f"Valor Total: R${total_price}").pack(pady=5)
         
         tk.Label(self, text="Selecione a forma de pagamento:").pack(pady=5)
         tk.Radiobutton(self, text="Dinheiro", variable=self.payment_var, value='Dinheiro').pack()
