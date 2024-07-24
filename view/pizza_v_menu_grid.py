@@ -129,7 +129,7 @@ class Application(tk.Tk):
         ]
         self.bebidas = [
             {"name": "Suco", "valor": 5.0, "quantidade": 0},
-            {"name": "Agua", "valor": 3.0, "quantidade": 0},
+            {"name": "Água", "valor": 3.0, "quantidade": 0},
             {"name": "Pepsi", "valor": 6.0, "quantidade": 0},
             {"name": "Guaraná", "valor": 6.0, "quantidade": 0},
             {"name": "Heineken", "valor": 8.0, "quantidade": 0},
@@ -169,7 +169,7 @@ class Application(tk.Tk):
         if not self.selected_items:
             messagebox.showwarning("Atenção!", "Selecione no mínimo um item antes de Ver o resumo do pedido.")
         else:
-            messagebox.showinfo("iten(s) adicionado(s)", "Item(s) adicionados ao seu pedido.")
+            messagebox.showinfo("item(s) adicionado(s)", "Item(s) adicionado(s) ao seu pedido.")
 
     def show_summary_window(self):
         if not self.selected_items:
@@ -196,10 +196,10 @@ class Application(tk.Tk):
         
         tk.Label(self,font=("Arial", 14), text="Selecione a forma de pagamento:").pack(pady=5)
         tk.Radiobutton(self,font=("Arial", 13), text="Dinheiro", variable=self.payment_var, value='Dinheiro').pack()
-        tk.Radiobutton(self,font=("Arial", 13), text="Cartao de Credito", variable=self.payment_var, value='Cartao de Credito').pack()
+        tk.Radiobutton(self,font=("Arial", 13), text="Cartao de Crédito", variable=self.payment_var, value='Cartao de Credito').pack()
         tk.Radiobutton(self,font=("Arial", 13), text="Pix", variable=self.payment_var, value='Pix').pack()
 
-        tk.Button(self,font=("Arial", 14), text="Finalize o Pedido", command=lambda: self.show_address_window(total_price)).pack(pady=10)
+        tk.Button(self,font=("Arial", 14), text="ir à Tela de Endereço", command=lambda: self.show_address_window(total_price)).pack(pady=10)
         tk.Button(self,font=("Arial", 14), text="Voltar ao Cardapio", command=self.show_menu_window).pack(pady=10)
                
     def show_address_window(self, total_price):
@@ -217,7 +217,7 @@ class Application(tk.Tk):
         self.delivery_var = tk.StringVar(value='Tele-Entrega')
         self.address_entry = tk.Entry(self)
 
-        tk.Label(self,font=("Arial", 16), text="Endereço da Entrega( deixe em branco se for pegar na loja)").pack(pady=5)
+        tk.Label(self,font=("Arial", 16), text="Endereço (deixe em branco se for pegar na loja):").pack(pady=5)
         self.address_entry.pack(pady=5)
         tk.Label(self,font=("Arial", 14), text=f"Frete: $10").pack(pady=15)
         tk.Label(self,font=("Arial", 14), text=f"Valor Total: ${total_price + 10 if self.delivery_var.get() == 'Tele-Entrega' else total_price}").pack(pady=5)
@@ -227,6 +227,7 @@ class Application(tk.Tk):
         tk.Radiobutton(self,font=("Arial", 14), text="Retirar na Loja", variable=self.delivery_var, value='Retirar na Loja').pack()
 
         tk.Button(self,font=("Arial", 16), text="Finalize o Pedido", command=lambda: self.validate_and_confirm_order(total_price)).pack(pady=20)
+        tk.Button(self,font=("Arial", 14), text="Voltar à Tela de Resumo", command=self.show_summary_window).pack(pady=10)
 
     def validate_and_confirm_order(self, total_price):
         address = self.address_entry.get()
@@ -235,13 +236,13 @@ class Application(tk.Tk):
         final_price = total_price + 10 if delivery_type == 'Tele-Entrega' else total_price
 
         if delivery_type == 'Tele-Entrega' and not address:
-            messagebox.showerror("Erro", "É necessario inserir o endereço para tele-entrega.Por favor insira um endereço.")
+            messagebox.showerror("Erro", "É necessario inserir o endereço para tele-entrega. Por favor, insira um endereço.")
             return
         
         items = ', '.join(item['name'] for item in self.selected_items)
         self.controller.place_order(self.user_id, items, final_price, payment_method, address, delivery_type)
         order_id = self.controller.get_last_order_id()
-        messagebox.showinfo("Pedido Finalizado", f"Numero do seu pedido:{order_id}. Obrigado por comprar conosco!")
+        messagebox.showinfo("Pedido Finalizado", f"Número do seu pedido:{order_id}. Obrigado por comprar conosco!")
         self.controller.clear_window(self)
         self.criar_tela_inicio()
 
