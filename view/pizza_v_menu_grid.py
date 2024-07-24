@@ -87,9 +87,6 @@ class Application(tk.Tk):
     def show_menu_window(self):
         self.controller.clear_window(self)
         
-        
-        # Criar uma Label como título da janela Menu
-        #tk.Label(menu_frame, text='CARDÁPIO', font=('Arial', 30)).pack(pady=10)
 
         # Carregar a imagem de fundo
         self.background_image = Image.open("midia\Estamos abertos story chamativo vermelho.png")
@@ -189,7 +186,7 @@ class Application(tk.Tk):
         self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        total_price = sum(item['valor'] for item in self.selected_items)
+        total_price = sum(item['quantidade'] * item['valor'] for item in self.selected_items)
         self.payment_var = tk.StringVar(value='Dinheiro')
 
         
@@ -204,7 +201,6 @@ class Application(tk.Tk):
 
         tk.Button(self,font=("Arial", 14), text="Finalize o Pedido", command=lambda: self.show_address_window(total_price)).pack(pady=10)
         tk.Button(self,font=("Arial", 14), text="Voltar ao Cardapio", command=self.show_menu_window).pack(pady=10)
-
                
     def show_address_window(self, total_price):
         self.controller.clear_window(self)
