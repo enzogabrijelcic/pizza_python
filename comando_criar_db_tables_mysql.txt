@@ -1,0 +1,25 @@
+CREATE DATABASE pizzaria_db;
+
+USE pizzaria_db;
+
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE cardapio (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(100) NOT NULL,
+    item_type VARCHAR(50) NOT NULL,
+    price DECIMAL(5,2) NOT NULL
+);
+
+CREATE TABLE pedido (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    items VARCHAR(255) NOT NULL,
+    total_price DECIMAL(5,2) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
