@@ -10,8 +10,15 @@ class Application(tk.Tk):
         self.controller = Controller()
         self.title("Pizza Python")
         self.geometry("600x600")
+        self.resizable(False,False)
         self.criar_tela_inicio()
-    
+        
+    def fechar_programa(self):
+        # Função para fechar o programa
+        if messagebox.askokcancel("Fechar programa", "Deseja fechar o programa?"):
+            self.destroy()  # Fecha a janela principal e finaliza o programa
+
+
     def criar_tela_inicio(self):
         self.controller.clear_window(self)
         # Carregar a imagem de fundo
@@ -24,7 +31,10 @@ class Application(tk.Tk):
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
        
-        tk.Button(self, text="Entrar", command=self.show_login_window, width=20,bg= "pink", height=2, font=("Arial", 16)).pack(pady=260)
+        botao_entrar = tk.Button(self, text="Entrar", command=self.show_login_window, width=15,bg= "pink", height=1, font=("Arial", 16))
+        botao_entrar.pack(pady=(240, 0), side=tk.TOP)
+        botao_sair = tk.Button(self, text="Sair", command=self.fechar_programa, width=15,bg= "pink", height=1, font=("Arial", 16))
+        botao_sair.pack(pady=(0, 240), side=tk.TOP)
 
     def show_login_window(self):
         self.controller.clear_window(self)
@@ -45,6 +55,7 @@ class Application(tk.Tk):
         self.password_entry.pack(pady=10)
         tk.Button(self, text="Login",font=("Arial", 16), command=self.login).pack(pady=30)
         tk.Button(self, text="Cadastrar",font=("Arial", 16), command=self.show_register_window).pack(pady=5)
+        tk.Button(self, text="Voltar Para Tela Inicial",font=("Arial", 16), command=self.criar_tela_inicio).pack(pady=5)
 
     def show_register_window(self):
         self.controller.clear_window(self)
