@@ -8,7 +8,7 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.controller = Controller()
-        self.title("Pizzaria Delivery")
+        self.title("Pizza Python")
         self.geometry("600x600")
         self.criar_tela_inicio()
     
@@ -214,16 +214,16 @@ class Application(tk.Tk):
         self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
         self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
 
-        self.delivery_var = tk.StringVar(value='Delivery')
+        self.delivery_var = tk.StringVar(value='Tele-Entrega')
         self.address_entry = tk.Entry(self)
 
         tk.Label(self,font=("Arial", 16), text="Endereço da Entrega( deixe em branco se for pegar na loja)").pack(pady=5)
         self.address_entry.pack(pady=5)
         tk.Label(self,font=("Arial", 14), text=f"Frete: $10").pack(pady=15)
-        tk.Label(self,font=("Arial", 14), text=f"Valor Total: ${total_price + 10 if self.delivery_var.get() == 'Delivery' else total_price}").pack(pady=5)
+        tk.Label(self,font=("Arial", 14), text=f"Valor Total: ${total_price + 10 if self.delivery_var.get() == 'Tele-Entrega' else total_price}").pack(pady=5)
         
         tk.Label(self,font=("Arial", 16), text="Selecione a Forma de entrega:").pack(pady=5)
-        tk.Radiobutton(self,font=("Arial", 14), text="Delivery", variable=self.delivery_var, value='Delivery').pack()
+        tk.Radiobutton(self,font=("Arial", 14), text="Tele-Entrega", variable=self.delivery_var, value='Tele-Entrega').pack()
         tk.Radiobutton(self,font=("Arial", 14), text="Retirar na Loja", variable=self.delivery_var, value='Retirar na Loja').pack()
 
         tk.Button(self,font=("Arial", 16), text="Finalize o Pedido", command=lambda: self.validate_and_confirm_order(total_price)).pack(pady=20)
