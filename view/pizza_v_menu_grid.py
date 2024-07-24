@@ -92,7 +92,7 @@ class Application(tk.Tk):
         #tk.Label(menu_frame, text='CARDÁPIO', font=('Arial', 30)).pack(pady=10)
 
         # Carregar a imagem de fundo
-        self.background_image = Image.open("midia/pizza_bg.jpg")
+        self.background_image = Image.open("midia\Estamos abertos story chamativo vermelho.png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -181,7 +181,7 @@ class Application(tk.Tk):
         
         self.controller.clear_window(self)
         # Carregar a imagem de fundo
-        self.background_image = Image.open("midia/tela_pedidos_carrinho.jpeg")
+        self.background_image = Image.open("midia\pngtree-delicious-nutritious-pizza-background-material-image_140939.jpg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -210,7 +210,7 @@ class Application(tk.Tk):
         self.controller.clear_window(self)
 
         # Carregar a imagem de fundo
-        self.background_image = Image.open("midia/tela_pedidos_carrinho.jpeg")
+        self.background_image = Image.open("midia\pngtree-delicious-nutritious-pizza-background-material-image_140939.jpg")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
