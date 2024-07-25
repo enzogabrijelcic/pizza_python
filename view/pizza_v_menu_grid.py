@@ -11,7 +11,15 @@ class Application(tk.Tk):
         self.title("Pizza Python")
         self.geometry("600x600")
         self.resizable(False,False)
+        self.app_no_centro_da_tela(600,600)
         self.criar_tela_inicio()
+    
+    def app_no_centro_da_tela(self, width, height):
+        largura_da_tela = self.winfo_screenwidth()
+        altura_da_tela = self.winfo_screenheight()
+        x = (largura_da_tela // 2) - (width // 2)
+        y = (altura_da_tela // 2) - (height // 2)
+        self.geometry(f'{width}x{height}+{x}+{y}')
         
     def fechar_programa(self):
         # Função para fechar o programa
@@ -149,6 +157,7 @@ class Application(tk.Tk):
 
         self.item_vars = {"Salgadas": [], "Doces": [], "Bebidas": []}
 
+        # Função que cria os widgets (label e spinbox) para os itens de uma categoria e os organiza em colunas.  
         def create_item_widgets(items, category):
             column = column_mapping[category]
             for row, item in enumerate(items, start=1):
