@@ -108,7 +108,7 @@ class Application(tk.Tk):
         
 
         # Carregar a imagem de fundo
-        self.background_image = Image.open("midia\Estamos abertos story chamativo vermelho.png")
+        self.background_image = Image.open("midia\Estamos abertos story chamativo vermelho (1).png")
         self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
         self.background_photo = ImageTk.PhotoImage(self.background_image)
 
@@ -179,6 +179,7 @@ class Application(tk.Tk):
 
         tk.Button(self, font=("Arial", 13), text="Adicionar ao Pedido", command=self.add_to_order).pack(pady=10)
         tk.Button(self, font=("Arial", 13), text="Ir ao Resumo do Pedido", command=self.show_summary_window).pack(pady=10)
+        tk.Button(self, font=("Arial", 13), text="Voltar a tela de login", command=self.show_login_window).pack(pady=10)
 
     def add_to_order(self):
         for category in self.item_vars:
