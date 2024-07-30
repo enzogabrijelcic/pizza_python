@@ -240,16 +240,43 @@ class Application(tk.Tk):
 
         tk.Label(self,font=("Arial", 16), text="Endereço (deixe em branco se for pegar na loja):").pack(pady=5)
         self.address_entry.pack(pady=5)
-        tk.Label(self,font=("Arial", 14), text=f"Frete: $10").pack(pady=15)
-        tk.Label(self,font=("Arial", 14), text=f"Valor Total: ${total_price + 10 if self.delivery_var.get() == 'Tele-Entrega' else total_price}").pack(pady=5)
         
-        tk.Label(self,font=("Arial", 16), text="Selecione a Forma de entrega:").pack(pady=5)
-        tk.Radiobutton(self,font=("Arial", 14), text="Tele-Entrega", variable=self.delivery_var, value='Tele-Entrega').pack()
-        tk.Radiobutton(self,font=("Arial", 14), text="Retirar na Loja", variable=self.delivery_var, value='Retirar na Loja').pack()
+        self.frete_label = tk.Label(self, font=("Arial", 14), text=f"Frete: R$10")
+        self.frete_label.pack(pady=15)
 
-        tk.Button(self,font=("Arial", 16), text="Finalize o Pedido", command=lambda: self.validate_and_confirm_order(total_price)).pack(pady=20)
-        tk.Button(self,font=("Arial", 14), text="Voltar à Tela de Resumo", command=self.show_summary_window).pack(pady=10)
+        self.total_com_frete_label = tk.Label(self, font=("Arial", 14), text=f"Valor Total com Frete: R${total_price + 10}")
+        self.total_com_frete_label.pack(pady=5)
 
+        self.total_sem_frete_label = tk.Label(self, font=("Arial", 14), text=f"Valor Total: R${total_price}")
+        self.total_sem_frete_label.pack(pady=5)
+        self.total_sem_frete_label.pack_forget()  # Esconde inicialmente
+
+        self.forma_entrega=tk.Label(self,font=("Arial", 16), text="Selecione a Forma de entrega:")
+        self.forma_entrega.pack(pady=5)
+        
+        self.tele_entrega=tk.Radiobutton(self,font=("Arial", 14), text="Tele-Entrega", variable=self.delivery_var, value='Tele-Entrega', command=self.update_labels)
+        self.tele_entrega.pack()
+        
+        self.retirar_loja= tk.Radiobutton(self,font=("Arial", 14), text="Retirar na Loja", variable=self.delivery_var, value='Retirar na Loja', command=self.update_labels)
+        self.retirar_loja.pack()
+
+        self.finaliza_botao=tk.Button(self,font=("Arial", 16), text="Finalize o Pedido", command=lambda: self.validate_and_confirm_order(total_price))
+        self.finaliza_botao.place(x=200, y=350)
+        
+        self.volta_botao=tk.Button(self,font=("Arial", 14), text="Voltar à Tela de Resumo", command=self.show_summary_window)
+        self.volta_botao.place(x=175, y=400)
+    
+    def update_labels(self):
+        if self.delivery_var.get() == 'Retirar na Loja':
+            self.frete_label.pack_forget()
+            self.total_com_frete_label.pack_forget()
+            self.total_sem_frete_label.pack()
+           
+        else:
+            self.frete_label.pack(pady=15)
+            self.total_com_frete_label.pack(pady=5)
+            self.total_sem_frete_label.pack_forget()
+        
     def validate_and_confirm_order(self, total_price):
         address = self.address_entry.get()
         delivery_type = self.delivery_var.get()
