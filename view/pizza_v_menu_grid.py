@@ -102,6 +102,126 @@ class Application(tk.Tk):
         self.controller.register(username, password)
         messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
         self.show_login_window()
+    
+    def show_order_history(self):
+        self.controller.clear_window(self)
+
+        self.background_image = Image.open("midia/papiro.jpg")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+        # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        orders = self.controller.get_user_orders(self.user_id)
+        
+        tk.Label(self, text="Histórico de Pedidos", font=("Arial", 16)).pack(pady=10)
+        
+        if not orders:
+            tk.Label(self, text="Nenhum pedido encontrado.").pack(pady=10)
+        else:
+            for order in orders:
+                tk.Label(self, text=f"Pedido ID: {order[0]}, Itens: {order[2]}, Total: R${order[3]}").pack(pady=5)
+        
+        tk.Button(self, text="Voltar ao Menu", command=self.show_menu_window).pack(pady=10)
+
+    def show_faq_window(self):
+        self.controller.clear_window(self)
+        faqs = self.controller.get_faqs()
+
+        tk.Label(self, text="Perguntas Frequentes", font=("Arial", 16)).pack(pady=20)
+
+        for faq in faqs:
+            tk.Label(self, text=f"Pergunta: {faq['question']}", font=("Arial", 14, 'bold')).pack(pady=5)
+            tk.Label(self, text=f"Resposta: {faq['answer']}", font=("Arial", 14)).pack(pady=10)
+
+        tk.Button(self, text="Voltar ao Menu", command=self.show_menu_window).pack(pady=20)
+    
+    def show_reviews_window(self):
+        self.controller.clear_window(self)
+        
+        # Create a frame for the entire content
+        self.content_frame = tk.Frame(self)
+        self.content_frame.pack(fill=tk.BOTH, expand=True)
+
+        # Create a frame for recent reviews with a scrollbar
+        self.reviews_canvas = tk.Canvas(self.content_frame)
+        self.reviews_scrollbar = ttk.Scrollbar(self.content_frame, orient="vertical", command=self.reviews_canvas.yview)
+        self.reviews_frame = tk.Frame(self.reviews_canvas)
+
+        # Create a window inside the canvas for the reviews_frame
+        self.reviews_canvas.create_window((0, 0), window=self.reviews_frame, anchor="nw")
+        self.reviews_canvas.configure(yscrollcommand=self.reviews_scrollbar.set)
+
+        # Pack the canvas and scrollbar
+        self.reviews_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.reviews_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Bind the configure event to update scroll region
+        self.reviews_frame.bind("<Configure>", self.on_frame_configure)
+
+        # Frame for adding new review
+        self.add_review_frame = tk.Frame(self.content_frame)
+        self.add_review_frame.pack(side=tk.BOTTOM, fill=tk.X, pady=20)
+
+        # Load reviews
+        self.load_reviews()
+
+        # Add the section for adding new reviews
+        self.add_review_section()
+
+    def on_frame_configure(self, event):
+        self.reviews_canvas.configure(scrollregion=self.reviews_canvas.bbox("all"))
+
+    def load_reviews(self):
+        reviews = self.controller.get_reviews()
+
+        if reviews:
+            tk.Label(self.reviews_frame, text="Avaliações Recentes:", font=("Arial", 14)).pack(pady=10)
+            for review in reviews:
+                username, rating, comment, created_at = review
+                review_frame = tk.Frame(self.reviews_frame, borderwidth=1, relief="solid")
+                review_frame.pack(pady=10, padx=10, fill=tk.X)
+
+                tk.Label(review_frame, text=f"{username} ({created_at}):", font=("Arial", 12)).pack(anchor=tk.W)
+                tk.Label(review_frame, text=f"Rating: {rating}", font=("Arial", 12)).pack(anchor=tk.W)
+                tk.Label(review_frame, text=f"Comment: {comment}", font=("Arial", 12)).pack(anchor=tk.W)
+        else:
+            tk.Label(self.reviews_frame, text="Ainda não há avaliações.", font=("Arial", 14)).pack(pady=10)
+
+    def add_review_section(self):
+        tk.Label(self.add_review_frame, text="Adicionar Nova Avaliação", font=("Arial", 14)).pack(pady=20)
+
+        self.rating_var = tk.IntVar(value=1)
+        tk.Label(self.add_review_frame, text="Nota (1 a 5):", font=("Arial", 12)).pack(pady=5)
+        tk.Spinbox(self.add_review_frame, from_=1, to=5, textvariable=self.rating_var, width=3, font=("Arial", 12)).pack(pady=10)
+
+        tk.Label(self.add_review_frame, text="Comentário:", font=("Arial", 12)).pack(pady=5)
+        self.comment_entry = tk.Entry(self.add_review_frame, width=50, font=("Arial", 12))
+        self.comment_entry.pack(pady=10)
+
+        tk.Button(self.add_review_frame, text="Enviar Avaliação", font=("Arial", 14), command=self.submit_review).pack(pady=20)
+        tk.Button(self.add_review_frame, text="Voltar ao Menu", font=("Arial", 14), command=self.show_menu_window).pack(pady=10)
+
+    def submit_review(self):
+        rating = self.rating_var.get()
+        comment = self.comment_entry.get()
+
+        if not comment.strip():
+            messagebox.showwarning("Atenção", "O comentário não pode estar vazio.")
+            return
+
+        # Call controller to save review
+        self.controller.add_review(self.user_id, rating, comment)
+        messagebox.showinfo("Sucesso", "Avaliação enviada com sucesso!")
+
+        # Reload reviews
+        self.show_reviews_window()
+
+        # Clear the entry fields
+        self.comment_entry.delete(0, tk.END)
+        self.rating_var.set(1)
         
     def show_menu_window(self):
         self.controller.clear_window(self)
@@ -180,6 +300,9 @@ class Application(tk.Tk):
         tk.Button(self, font=("Arial", 13), text="Adicionar ao Pedido", command=self.add_to_order).pack(pady=10)
         tk.Button(self, font=("Arial", 13), text="Ir ao Resumo do Pedido", command=self.show_summary_window).pack(pady=10)
         tk.Button(self, font=("Arial", 13), text="Voltar a tela de login", command=self.show_login_window).pack(pady=10)
+        tk.Button(self, font=("Arial", 13), text="Historico de pedidos", command=self.show_order_history).pack(pady=10)
+        tk.Button(self, font=("Arial", 13), text="Tela de perguntas", command=self.show_faq_window).pack(pady=10)
+        tk.Button(self, font=("Arial", 13), text="Tela de Avaliaçoes", command=self.show_reviews_window).pack(pady=10)
 
     def add_to_order(self):
         for category in self.item_vars:
@@ -265,6 +388,7 @@ class Application(tk.Tk):
         
         self.volta_botao=tk.Button(self,font=("Arial", 14), text="Voltar à Tela de Resumo", command=self.show_summary_window)
         self.volta_botao.place(x=175, y=400)
+    
     
     def update_labels(self):
         if self.delivery_var.get() == 'Retirar na Loja':

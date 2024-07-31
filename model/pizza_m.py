@@ -59,3 +59,32 @@ class Database:
             query = "SELECT LAST_INSERT_ID()"
             self.cursor.execute(query)
             return self.cursor.fetchone()[0]
+    
+    def get_user_orders(self, user_id):
+        try:
+            query = "SELECT * FROM pedido WHERE user_id = %s"
+            self.cursor.execute(query, (user_id,))
+            return self.cursor.fetchall()
+        except mariadb.Error as e:
+            print(f"Erro ao obter histórico de pedidos: {e}")
+            return []
+        
+    def get_reviews(self):
+        try:
+            query = "SELECT users.username, rating, comment, created_at FROM avaliacoes JOIN users ON avaliacoes.user_id = users.user_id"
+            self.cursor.execute(query)
+            return self.cursor.fetchall()
+        except mariadb.Error as e:
+            print(f"Erro ao obter avaliações: {e}")
+            return []
+    
+    def add_review(self, user_id, rating, comment):
+        try:
+            query = "INSERT INTO avaliacoes (user_id, rating, comment) VALUES (%s, %s, %s)"
+            self.cursor.execute(query, (user_id, rating, comment))
+            self.conn.commit()
+        except mariadb.Error as e:
+            print(f"Erro ao adicionar avaliação: {e}")
+    
+
+    

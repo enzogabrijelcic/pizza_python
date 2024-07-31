@@ -28,4 +28,22 @@ class Controller:
         for widget in parent.winfo_children():
             widget.destroy()
     
+    def get_user_orders(self, user_id):
+        return self.db.get_user_orders(user_id)
+    
+    def get_faqs(self):
+        # Exemplo de FAQs estáticas
+        faqs = [
+            {"question": "Como faço para realizar um pedido?", "answer": "Você pode fazer um pedido através da nossa tela de menu. Selecione os itens desejados e siga o processo de checkout."},
+            {"question": "Quais são os métodos de pagamento aceitos?", "answer": "Aceitamos Dinheiro, Cartão de Crédito e Pix."},
+            {"question": "Qual é o horário de funcionamento?", "answer": "Estamos abertos todos os dias das 10h às 23h."},
+            {"question": "Como posso alterar meu endereço de entrega?", "answer": "Você pode atualizar seu endereço na tela de perfil do usuário antes de finalizar um pedido."}
+        ]
+        return faqs
+
+    def get_reviews(self):
+        return self.db.get_reviews()
+
+    def add_review(self, user_id, rating, comment):
+        self.db.add_review(user_id, rating, comment)
     
