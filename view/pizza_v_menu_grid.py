@@ -99,6 +99,7 @@ class Application(tk.Tk):
     def register(self):
         username = self.new_username_entry.get()
         password = self.new_password_entry.get()
+<<<<<<< HEAD
         self.controller.register(username, password)
         messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
         self.show_login_window()
@@ -222,6 +223,20 @@ class Application(tk.Tk):
         # Clear the entry fields
         self.comment_entry.delete(0, tk.END)
         self.rating_var.set(1)
+=======
+        
+        if username == "":
+            messagebox.showwarning("Atenção!", "Nenhum campo pode estar vazio!")
+        elif password == "":
+            messagebox.showwarning("Atenção!", "Nenhum campo pode estar vazio!")
+        else:
+            try:
+                self.controller.register(username, password)
+                messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
+                self.show_login_window()
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao cadastrar: {str(e)}")
+>>>>>>> fc5d9c896236ea6930473a1200992a053f5073fd
         
     def show_menu_window(self):
         self.controller.clear_window(self)

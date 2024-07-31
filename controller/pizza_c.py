@@ -1,5 +1,6 @@
 from model.pizza_m import Database
 from tkinter import messagebox
+import mariadb
 
 class Controller:
     def __init__(self):
@@ -8,8 +9,17 @@ class Controller:
     def login(self, username, password):
         return self.db.login_user(username, password)
 
+    #def register(self, username, password):
+     #   self.db.register_user(username, password)
+     
     def register(self, username, password):
-        self.db.register_user(username, password)
+        try:
+            self.db.register_user(username, password)
+        except mariadb.Error as err:
+            if err.errno == 1062:  # Código de erro para entrada duplicada
+                raise Exception("Nome de usuário já existe. Escolha outro nome de usuário.")
+            else:
+                raise Exception("Erro ao acessar o banco de dados: " + str(err))
 
     def get_menu(self):
         return self.db.get_menu_items()

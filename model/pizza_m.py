@@ -25,14 +25,15 @@ class Database:
         except mariadb.Error as e:
             print(f"Erro ao executar login: {e}")
             return None
-
+              
     def register_user(self, username, password):
         try:
             query = "INSERT INTO users (username, password) VALUES (%s, %s)"
             self.cursor.execute(query, (username, password))
             self.conn.commit()
         except mariadb.Error as e:
-            print(f"Erro ao registrar usuário: {e}")
+            self.conn.rollback()
+            raise e
 
     def get_menu_items(self):
         try:
