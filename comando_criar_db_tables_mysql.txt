@@ -25,3 +25,12 @@ CREATE TABLE pedido (
     delivery_type VARCHAR(50) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+CREATE TABLE avaliacoes (
+    avaliacao_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    rating INT NOT NULL,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);

@@ -43,6 +43,8 @@ class Application(tk.Tk):
         botao_entrar.pack(pady=(240, 0), side=tk.TOP)
         botao_sair = tk.Button(self, text="Sair", command=self.fechar_programa, width=15,bg= "pink", height=1, font=("Arial", 16))
         botao_sair.pack(pady=(0, 240), side=tk.TOP)
+        
+
 
     def show_login_window(self):
         self.controller.clear_window(self)
@@ -92,17 +94,45 @@ class Application(tk.Tk):
         if user:
             self.user_id = user[0]
             messagebox.showinfo("Login!", "Seja bem vindo!")
-            self.show_menu_window()
+            self.menu_geral()
         else:
             messagebox.showerror("Erro", "Login Inválido")
+        
 
     def register(self):
         username = self.new_username_entry.get()
         password = self.new_password_entry.get()
-<<<<<<< HEAD
-        self.controller.register(username, password)
-        messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
-        self.show_login_window()
+
+        if username == "":
+            messagebox.showwarning("Atenção!", "Nenhum campo pode estar vazio!")
+        elif password == "":
+            messagebox.showwarning("Atenção!", "Nenhum campo pode estar vazio!")
+        else:
+            try:
+                self.controller.register(username, password)
+                messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
+                self.show_login_window()
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao cadastrar: {str(e)}")
+        
+    def menu_geral(self):
+        self.controller.clear_window(self)
+
+        self.background_image = Image.open("midia/papiro.jpg")
+        self.background_image = self.background_image.resize((600, 600))  # Redimensiona a imagem para 600x600
+        self.background_photo = ImageTk.PhotoImage(self.background_image)
+
+            # Criar uma Label para a imagem de fundo que ocupa toda a tela
+        self.background_label = tk.Label(self, image=self.background_photo, background="yellow")
+        self.background_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+        tk.Label(self, text="MENU", font=("Arial", 19)).pack(pady=10)
+        tk.Button(self, text="Historico de Pedidos", command=self.show_order_history).pack(pady=20)
+        tk.Button(self, text="Perguntas Frequentes", command=self.show_faq_window).pack(pady=20)
+        tk.Button(self, text="Avaliações dos Usuarios", command=self.show_reviews_window).pack(pady=20)
+        tk.Button(self, text="Cardapio", command=self.show_menu_window).pack(pady=20)
+        tk.Button(self, text="Voltar", font=("Arial", 14), command=self.criar_tela_inicio).pack(pady=10)
+
     
     def show_order_history(self):
         self.controller.clear_window(self)
@@ -125,7 +155,7 @@ class Application(tk.Tk):
             for order in orders:
                 tk.Label(self, text=f"Pedido ID: {order[0]}, Itens: {order[2]}, Total: R${order[3]}").pack(pady=5)
         
-        tk.Button(self, text="Voltar ao Menu", command=self.show_menu_window).pack(pady=10)
+        tk.Button(self, text="Voltar ao Menu", command=self.menu_geral).pack(pady=10)
 
     def show_faq_window(self):
         self.controller.clear_window(self)
@@ -137,7 +167,7 @@ class Application(tk.Tk):
             tk.Label(self, text=f"Pergunta: {faq['question']}", font=("Arial", 14, 'bold')).pack(pady=5)
             tk.Label(self, text=f"Resposta: {faq['answer']}", font=("Arial", 14)).pack(pady=10)
 
-        tk.Button(self, text="Voltar ao Menu", command=self.show_menu_window).pack(pady=20)
+        tk.Button(self, text="Voltar ao Menu", command=self.menu_geral).pack(pady=20)
     
     def show_reviews_window(self):
         self.controller.clear_window(self)
@@ -203,7 +233,7 @@ class Application(tk.Tk):
         self.comment_entry.pack(pady=10)
 
         tk.Button(self.add_review_frame, text="Enviar Avaliação", font=("Arial", 14), command=self.submit_review).pack(pady=20)
-        tk.Button(self.add_review_frame, text="Voltar ao Menu", font=("Arial", 14), command=self.show_menu_window).pack(pady=10)
+        tk.Button(self.add_review_frame, text="Voltar ao Menu", font=("Arial", 14), command=self.menu_geral).pack(pady=10)
 
     def submit_review(self):
         rating = self.rating_var.get()
@@ -223,20 +253,7 @@ class Application(tk.Tk):
         # Clear the entry fields
         self.comment_entry.delete(0, tk.END)
         self.rating_var.set(1)
-=======
-        
-        if username == "":
-            messagebox.showwarning("Atenção!", "Nenhum campo pode estar vazio!")
-        elif password == "":
-            messagebox.showwarning("Atenção!", "Nenhum campo pode estar vazio!")
-        else:
-            try:
-                self.controller.register(username, password)
-                messagebox.showinfo("OK!", "Usuário cadastrado corretamente!")
-                self.show_login_window()
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao cadastrar: {str(e)}")
->>>>>>> fc5d9c896236ea6930473a1200992a053f5073fd
+
         
     def show_menu_window(self):
         self.controller.clear_window(self)
@@ -314,10 +331,8 @@ class Application(tk.Tk):
 
         tk.Button(self, font=("Arial", 13), text="Adicionar ao Pedido", command=self.add_to_order).pack(pady=10)
         tk.Button(self, font=("Arial", 13), text="Ir ao Resumo do Pedido", command=self.show_summary_window).pack(pady=10)
-        tk.Button(self, font=("Arial", 13), text="Voltar a tela de login", command=self.show_login_window).pack(pady=10)
-        tk.Button(self, font=("Arial", 13), text="Historico de pedidos", command=self.show_order_history).pack(pady=10)
-        tk.Button(self, font=("Arial", 13), text="Tela de perguntas", command=self.show_faq_window).pack(pady=10)
-        tk.Button(self, font=("Arial", 13), text="Tela de Avaliaçoes", command=self.show_reviews_window).pack(pady=10)
+        tk.Button(self, font=("Arial", 13), text="Voltar ao Menu", command=self.show_menu_window).pack(pady=10)
+        
 
     def add_to_order(self):
         for category in self.item_vars:
@@ -403,7 +418,6 @@ class Application(tk.Tk):
         
         self.volta_botao=tk.Button(self,font=("Arial", 14), text="Voltar à Tela de Resumo", command=self.show_summary_window)
         self.volta_botao.place(x=175, y=400)
-    
     
     def update_labels(self):
         if self.delivery_var.get() == 'Retirar na Loja':
